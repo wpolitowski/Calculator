@@ -1,5 +1,6 @@
 * {
     margin: 0;
+    box-sizing: border-box;
     /border: none;
 }
 
@@ -23,15 +24,26 @@ body {
 
 button {
     height: 15%;
-    flex: 1 0 25%;
+    width: 25%;
     font-size: 20px;
+}
+
+button.equals {
+    height: 30%;
+}
+
+
+button:nth-of-type(2n+5), button:nth-of-type(4n+6) {
+    margin-bottom: -90px;
 }
 
 .result {
     flex-basis: 100%;
     min-height: 100px;
-    
     align-self: flex-end;
     margin-bottom: 50px;
     background-color: aliceblue;
+    font-size: 36px;
+    text-align: right;
+    padding: 10px;
 }
