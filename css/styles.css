@@ -37,6 +37,10 @@ button:nth-of-type(2n+5), button:nth-of-type(4n+6) {
     margin-bottom: -90px;
 }
 
+button:disabled {
+    
+}
+
 .result {
     flex-basis: 100%;
     min-height: 100px;
