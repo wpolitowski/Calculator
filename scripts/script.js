@@ -53,7 +53,7 @@ operators.forEach(operator => operator.addEventListener('click', addOperator));
 
 //EVALUATE EXPRESSION
 equals.addEventListener('click', () => {
-    if (!currOp.includes('') && currOp.length === 3) {
+    if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) {
         const result = operate(...currOp);
         currOp = [result.toString(),'',''];
         display();
@@ -73,11 +73,7 @@ function addOperand() {
 }
 
 function addOperator() {
-    if (currOp[0] && !currOp[2]) {
-        // if (!currOp[1]) resultDiv.textContent += this.textContent;
-        // else resultDiv.textContent =
-        //     resultDiv.textContent.slice(0,-1) + this.textContent; //this allows to change operator for another one        
-        
+    if (currOp[0] && !currOp[2] && !currOp[0].endsWith('.')) {        
         currOp[1] = this.textContent;
         display();
     }
@@ -113,5 +109,14 @@ plusMinus.onclick = () => {
     }
     display();
 };
+
+//DECIMALS
+const decimal = document.querySelector('.decimal');
+decimal.addEventListener('click', () => {
+    if (currOp[2] && !currOp[2].includes('.')) currOp[2] += '.';
+    else if (currOp[0] && !currOp[1] && !currOp[0].includes('.')) currOp[0] += '.';
+    display(); 
+});
+
 
 // fix 0 and multiple 0's at the beginning. It should only be allowed if followed by a dot
