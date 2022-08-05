@@ -29,6 +29,9 @@ function operate(a, operator, b) {
             return multiply(a, b);
             break;
         case '÷':
+            if (b === 0) {
+                alert("You cannot divide by 0!");
+            }
             return divide(a, b);
             break;
         default:
@@ -58,12 +61,18 @@ operators.forEach(operator => operator.addEventListener('click', evaluateExpress
 
 function evaluateExpression() {
     if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) {
-        const result = operate(...currOp);
-        currOp = [result.toString(),'',''];
+        const result = +operate(...currOp).toFixed(4);
+        
+        if (result === Infinity || result === -Infinity) {
+            currOp[2] = '';
+            enableNumbers();
+        } else { //typical execution
+            currOp = [result.toString(),'',''];
 
-        if (this.textContent !== '=') {
-            currOp[1] = this.textContent;
-        } //add operator for next calculation
+            if (this.textContent !== '=') {
+                currOp[1] = this.textContent;
+            } //add an operator for the next calculation if function was called by the operator
+        }
         
         display();
     }
