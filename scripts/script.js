@@ -25,10 +25,9 @@ function operate(a, operator, b) {
             return subtract(a, b);
             break;
         case '*':
-
             return multiply(a, b);
             break;
-        case '÷':
+        case '/':
             if (b === 0) {
                 alert("You cannot divide by 0!");
             }
@@ -51,8 +50,9 @@ const equals = document.querySelector('.equals');
 const numbers = Array.from(buttons)
     .filter(button => /[0-9]/.test(button.textContent));
 
-numbers.forEach(number => number.addEventListener('click', addOperand));
-operators.forEach(operator => operator.addEventListener('click', addOperator));
+numbers.forEach(number => number.addEventListener('click', () => addOperand(number.dataset.value)));
+operators.forEach(operator => operator.addEventListener('click', () =>
+    addOperator(operator.dataset.value)));
 
 
 //EVALUATE EXPRESSION 
@@ -78,34 +78,37 @@ function evaluateExpression() {
     }
 }
 
-
 function display() {
     resultDiv.textContent = currOp.join('');
+    const str = resultDiv.textContent;
+    if (str.includes('/')) resultDiv.textContent = str.replace('/','÷');
 }
 
 
-function addOperand() {
+function addOperand(num) {
     if (!currOp[1]) {
-        currOp[0] += this.textContent; //adds first operand        
+        currOp[0] += num; //adds first operand        
         if (currOp[0] === '0' || currOp[0] === '-0') disableNumbers();
     }
     else {//adds second operand only when operator has been selected 
-        currOp[2] += this.textContent;
+        currOp[2] += num;
         if (currOp[2] === '0' || currOp[2] === '-0') disableNumbers();
     }
     display();    
 }
 
-function addOperator() {
-    if (currOp[0] && !currOp[2] && !currOp[0].endsWith('.')) {        
-        currOp[1] = this.textContent;
+function addOperator(operator) {
+    if (currOp[0] && !currOp[1] && !currOp[0].endsWith('.')) {        
+        currOp[1] = operator;
         display();
     }
 }
 
 //CLEAR
-const clear = document.querySelector('.clear');
-clear.onclick = () => {
+const clearBtn = document.querySelector('.clear');
+clearBtn.addEventListener('click', clear);
+
+function clear() {
     currOp = ['','',''];
     resultDiv.textContent = '';
     enableNumbers();
@@ -113,7 +116,9 @@ clear.onclick = () => {
 
 //BACKSPACE
 const deleteBtn = document.querySelector('.delete');
-deleteBtn.onclick = () => {
+deleteBtn.addEventListener('click', deleteCharacter);
+
+function deleteCharacter() {
     if (currOp[2]) currOp[2] = currOp[2].slice(0,-1);
     else if (currOp[1]) currOp[1] = '';
     else currOp[0] = currOp[0].slice(0,-1);
@@ -127,21 +132,35 @@ deleteBtn.onclick = () => {
 
 //PLUS/MINUS
 const plusMinus = document.querySelector('.plus-minus');
-plusMinus.onclick = () => {
-    if (currOp[2]) {
-        if (currOp[2].startsWith('-')) currOp[2] = currOp[2].slice(1);
-        else currOp[2] = '-' + currOp[2];
-    }
-    else if (currOp[0] && !currOp[1]) {
+plusMinus.addEventListener('click', reverseNumberSign);
+
+function reverseNumberSign() {
+    if (currOp[0] && !currOp[1]) {
         if (currOp[0].startsWith('-')) currOp[0] = currOp[0].slice(1);
         else currOp[0] = '-' + currOp[0];
+    } else if (!currOp[0]) currOp[0] = '-' + currOp[0];
+    else if (currOp[2]) {
+        if (currOp[2].startsWith('-')) currOp[2] = currOp[2].slice(1);
+        else {
+            if (currOp[1] === '-') { //two minuses make a plus
+                currOp[1] = '+';
+            } else currOp[2] = '-' + currOp[2];    
+        }        
+    } else if (!currOp[2] && currOp[1]) {
+        if (currOp[1] === '-') { 
+            currOp[1] = '+';
+        } else currOp[2] = '-' + currOp[2];
     }
+    
+
     display();
 };
 
 //DECIMALS
 const decimal = document.querySelector('.decimal');
-decimal.addEventListener('click', () => {
+decimal.addEventListener('click', addDecimal);
+
+function addDecimal() {
     if (currOp[2] && !currOp[2].includes('.')) {
         currOp[2] += '.';
         
@@ -160,7 +179,7 @@ decimal.addEventListener('click', () => {
     }    
 
     display(); 
-});
+}
 
 //DISABLE/ENABLE NUMBERS
 
@@ -171,4 +190,29 @@ function disableNumbers() {
 function enableNumbers() {
     numbers.forEach(number => number.disabled = false);    
 }
+
+
+//KEYBOARD SUPPORT
+window.addEventListener("keydown", handleKeyboardInput); // check (e)
+
+function handleKeyboardInput(e) {
+    const operators = "+-*/";
+    const numbers = "0123456789";
+    if (numbers.includes(e.key)) addOperand(e.key);
+    else if (operators.includes(e.key)) {
+        if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) evaluateExpression();
+        else addOperator(e.key);
+    } else if (e.key === '=' || e.key === 'Enter') evaluateExpression();
+    else if (e.key === 'Backspace') deleteCharacter();
+    else if (e.key === 'Delete' || e.key === 'Escape') clear();
+    else if (e.key === '.') addDecimal();
+    else if (e.key === 'Tab') {
+        e.preventDefault();
+        reverseNumberSign();
+    }
+}
+
+//set max length for displayDiv.textContent
+
+// ÷
 
