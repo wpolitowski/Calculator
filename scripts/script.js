@@ -65,7 +65,6 @@ function evaluateExpression() {
         
         if (result === Infinity || result === -Infinity) {
             currOp[2] = '';
-            enableNumbers();
         } else { //typical execution
             currOp = [result.toString(),'',''];
 
@@ -79,7 +78,7 @@ function evaluateExpression() {
 }
 
 function display() {
-    resultDiv.textContent = currOp.join('');
+    resultDiv.textContent = currOp.join('').substring(0,41);
     const str = resultDiv.textContent;
     if (str.includes('/')) resultDiv.textContent = str.replace('/','÷');
 }
@@ -87,12 +86,12 @@ function display() {
 
 function addOperand(num) {
     if (!currOp[1]) {
-        currOp[0] += num; //adds first operand        
-        if (currOp[0] === '0' || currOp[0] === '-0') disableNumbers();
+        if (currOp[0] === '0' || currOp[0] === '-0') currOp[0] = currOp[0].replace('0', num);
+        else currOp[0] += num;
     }
     else {//adds second operand only when operator has been selected 
-        currOp[2] += num;
-        if (currOp[2] === '0' || currOp[2] === '-0') disableNumbers();
+        if (currOp[2] === '0' || currOp[2] === '-0') currOp[2] = currOp[2].replace('0', num);
+        else currOp[2] += num;
     }
     display();    
 }
@@ -111,7 +110,6 @@ clearBtn.addEventListener('click', clear);
 function clear() {
     currOp = ['','',''];
     resultDiv.textContent = '';
-    enableNumbers();
 };
 
 //BACKSPACE
@@ -122,10 +120,6 @@ function deleteCharacter() {
     if (currOp[2]) currOp[2] = currOp[2].slice(0,-1);
     else if (currOp[1]) currOp[1] = '';
     else currOp[0] = currOp[0].slice(0,-1);
-
-    //if left with '0' - disable numbers again, after deleting '0' make sure numbers are enabled
-    if (currOp[0] === '0' || currOp[2] === '0' || currOp[0] === '-0' || currOp[2] === '-0') disableNumbers()
-    else if (currOp[0] === '' || currOp[2] === '') enableNumbers();
 
     display();
 };
@@ -163,19 +157,9 @@ decimal.addEventListener('click', addDecimal);
 function addDecimal() {
     if (currOp[2] && !currOp[2].includes('.')) {
         currOp[2] += '.';
-        
-        if (currOp[2] === '0.' || currOp[2] === '-0.') {
-            //enable 1-9 digits if "0." has been entered
-            enableNumbers();
-        }
     }
     else if (currOp[0] && !currOp[1] && !currOp[0].includes('.')) {
-        currOp[0] += '.';
-
-        if (currOp[0] === '0.' || currOp[2] === '-0.') {
-            //enable 1-9 digits if "0." has been entered
-            enableNumbers();
-        }        
+        currOp[0] += '.'; 
     }    
 
     display(); 
@@ -211,8 +195,4 @@ function handleKeyboardInput(e) {
         reverseNumberSign();
     }
 }
-
-//set max length for displayDiv.textContent
-
-// ÷
 
