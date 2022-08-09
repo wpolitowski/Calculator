@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@100;200;300;400;700&family=Poppins:wght@100;200;300;400;700;900&family=Roboto:wght@100;300;400;700;900&family=Sora:wght@100;200;300;400;700&display=swap');
+
 * {
     margin: 0;
     box-sizing: border-box;
-    /border: none;
+    border: none;
+    padding: 0;
+
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    color: #fff;
 }
 
 body {
@@ -9,46 +16,62 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #72A0C1;
+    background-color: #BFC9CA;  
     min-height: 100vh;
 }
 
 .calculator {
+    display: flex;
+    flex-direction: column;
     width: 400px;
     height: 600px;
-    border: 2px solid lightgoldenrodyellow;
-    background-color: #B0C4DE;
-    display: flex;
-    flex-flow: row wrap-reverse;
-}
-
-button {
-    height: 15%;
-    width: 25%;
-    font-size: 20px;
-}
-
-button.equals {
-    height: 30%;
-}
-
-
-button:nth-of-type(2n+5), button:nth-of-type(4n+6) {
-    margin-bottom: -90px;
-}
-
-button:disabled {
-    
+    background-color: #34495E;
+    box-shadow: 0 0 8px 0px #777; 
+    border-radius: 24px;
 }
 
 .result {
-    flex-basis: 100%;
-    min-height: 100px;
-    align-self: flex-end;
-    margin-bottom: 50px;
-    background-color: aliceblue;
-    font-size: 36px;
+    min-height: 120px;
+    font-size: 48px;
+    line-height: 1;
     text-align: right;
+    word-break: break-all;
+    padding: 20px 16px;
+}
+
+.buttons-container {
     padding: 10px;
-    word-break: break-word;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    height: 480px;
+}
+
+button {
+    line-height: 5px;
+    font-size: 36px;
+    width: 80px;
+    height: 80px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #333;
+    margin: 6px;
+    background-color: #41566b;
+    
+}
+
+button.equals {
+    height: 172px;
+    border-radius: 40px;
+}
+
+.equals {
+    background-color: #bacfe4;
+}
+
+.operator,
+.clear,
+.delete {
+    background-color: #8193a5;
 }

@@ -65,12 +65,11 @@ function evaluateExpression() {
         
         if (result === Infinity || result === -Infinity) {
             currOp[2] = '';
-        } else { //typical execution
-            currOp = [result.toString(),'',''];
-
-            if (this.textContent !== '=') {
-                currOp[1] = this.textContent;
+        } else { //typical execution        
+            if (currOp[1] !== '=') {
+                currOp = [result.toString(),currOp[1],''];
             } //add an operator for the next calculation if function was called by the operator
+            else currOp = [result.toString(),'',''];
         }
         
         display();
@@ -78,9 +77,21 @@ function evaluateExpression() {
 }
 
 function display() {
-    resultDiv.textContent = currOp.join('').substring(0,41);
-    const str = resultDiv.textContent;
+    let str = resultDiv.textContent;
+    str = resultDiv.textContent = currOp.join('').substring(0,22);
+
+    if (str.length === 22) { //trim currOp as well to make sure no 'ghost' characters are accepted (they would have to be deleted by user)
+        if (currOp[1]) { 
+            const op = str.indexOf(currOp[1]);
+            currOp[0] = str.slice(0,op);
+            currOp[2] = str.slice(op+1);
+        } else {
+            currOp[0] = str;
+        }
+    }
+
     if (str.includes('/')) resultDiv.textContent = str.replace('/','÷');
+    else if (str.includes('*')) resultDiv.textContent = str.replace('*','×');
 }
 
 
@@ -175,7 +186,6 @@ function enableNumbers() {
     numbers.forEach(number => number.disabled = false);    
 }
 
-
 //KEYBOARD SUPPORT
 window.addEventListener("keydown", handleKeyboardInput); // check (e)
 
@@ -195,4 +205,3 @@ function handleKeyboardInput(e) {
         reverseNumberSign();
     }
 }
-
