@@ -58,7 +58,8 @@ button {
     box-shadow: 0 0 10px #333;
     margin: 6px;
     background-color: #41566b;
-    
+    transform: scale(1);
+    transition: transform .05s ease-in-out;
 }
 
 button.equals {
@@ -74,4 +75,32 @@ button.equals {
 .clear,
 .delete {
     background-color: #8193a5;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.digit:hover {
+    background-color: #bacfe4;
+    color: #41566b;
+}
+
+.equals:hover {
+    background-color: #41566b;
+}
+
+.operator:hover,
+.clear:hover,
+.delete:hover {
+    background-color: #41566b;
+}
+
+.plus-minus:hover,
+.decimal:hover {
+    background-color: #8193a5;
+}
+
+button:active {
+    transform: scale(.95);
 }
