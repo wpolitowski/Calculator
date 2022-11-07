@@ -59,17 +59,27 @@ operators.forEach(operator => operator.addEventListener('click', () =>
 equals.addEventListener('click', evaluateExpression);
 operators.forEach(operator => operator.addEventListener('click', evaluateExpression));
 
-function evaluateExpression() {
+function evaluateExpression(btnPressed) {
     if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) {
         const result = +operate(...currOp).toFixed(4);
         
         if (result === Infinity || result === -Infinity) {
             currOp[2] = '';
         } else { //typical execution        
-            if (currOp[1] !== '=') {
-                currOp = [result.toString(),currOp[1],''];
-            } //add an operator for the next calculation if function was called by the operator
-            else currOp = [result.toString(),'',''];
+            //this function can be called by clicking (PointerEvent) or by a key press
+            //if expression is evaluated using "=" sign, only the result is shown
+            //if it is evaluated using one of four operators "+-*/", the result is shown
+            //  alongside with that operator for following operation
+            if (btnPressed instanceof PointerEvent) {
+                const clickedSign = btnPressed.target.dataset.value;
+                if (clickedSign !== "=") {
+                    currOp = [result.toString(), clickedSign, ""];
+                } else currOp = [result.toString(), "", ""];
+            } else {
+                if (btnPressed !== "=" && btnPressed !== "Enter") {
+                    currOp = [result.toString(), btnPressed, ""];
+                } else currOp = [result.toString(), "", ""];
+            }
         }
         
         display();
@@ -194,9 +204,9 @@ function handleKeyboardInput(e) {
     const numbers = "0123456789";
     if (numbers.includes(e.key)) addOperand(e.key);
     else if (operators.includes(e.key)) {
-        if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) evaluateExpression();
+        if (!currOp.includes('') && currOp.length === 3 && !currOp[2].endsWith('.')) evaluateExpression(e.key);
         else addOperator(e.key);
-    } else if (e.key === '=' || e.key === 'Enter') evaluateExpression();
+    } else if (e.key === '=' || e.key === 'Enter') evaluateExpression(e.key);
     else if (e.key === 'Backspace') deleteCharacter();
     else if (e.key === 'Delete' || e.key === 'Escape') clear();
     else if (e.key === '.') addDecimal();
