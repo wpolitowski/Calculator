@@ -6,14 +6,14 @@ The final assignment in the Foundations Course of The Odin Project. Built from s
 
 Available [here](https://wpolitowski.github.io/Calculator/) 👈
 
-![calculator gif final](https://user-images.githubusercontent.com/102621458/200423696-ae3007ac-f569-466c-9203-4f7cec941043.gif)
+![calculator gif final hq](https://user-images.githubusercontent.com/102621458/200631710-0114a41e-0355-4939-957e-51a0b9eb08fe.gif)
+
 
 ## Features
 
 - Keyboard support
 - Floating point numbers support
-- Expression can be evaluated conventionally by pressing the equals button (or Enter on the keyboard) or by pressing one of four operators. In the latter case, the result is displayed along with such sign for subsequent operation. For instance, <br>
-entering `2 + 2 -` &nbsp;results in ``4 - (space for another number to be entered)``
+- Expression can be evaluated conventionally by pressing the equals button (or Enter on the keyboard) or by pressing one of four operators. In the latter case, the result is displayed along with such sign for subsequent operation. For instance, entering `2 + 2 -` &nbsp;results in ``4 - (space for another number to be entered)``
 
 
 
